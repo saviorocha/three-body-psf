@@ -8,21 +8,25 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import PillowWriter
 
 mT = 1
-mS = 333000
-mL = 0.012328308
+mS = 1
+mL = 1
+v1 = 0.39295
+v2 = 0.09758
+# mS = 333000
+# mL = 0.012328308
 
 xT_0 = 0
 yT_0 = 1
 xS_0 = 0
 yS_0 = 0
 xL_0 = 0
-yL_0 = 0.002569519
+yL_0 = yT_0 + 0.1
 
-vxT_0 = np.sqrt(mS)
+vxT_0 = v1
 vyT_0 = 0
 vxS_0 = 0
 vyS_0 = 0
-vxL_0 = vxT_0 + np.sqrt(mS)
+vxL_0 = vxT_0 + 0.1
 # vxL_0 = vxT_0 + (2 * math.pi * yL_0) / Tt * 10**2
 vyL_0 = 0
 
@@ -40,7 +44,7 @@ def dSdt(t, S):
         vyS,
         vxL,
         vyL,
-        (mS/r12**3 * (xS-xT) + mL/r13**3 * (xL-xT)), # aceleração da
+        (mS/r12**3 * (xS-xT) + mL/r13**3 * (xL-xT)),
         (mS/r12**3 * (yS-yT) + mL/r13**3 * (yL-yT)),
         (mT/r12**3 * (xT-xS) + mL/r23**3 * (xL-xS)),
         (mT/r12**3 * (yT-yS) + mL/r23**3 * (yL-yS)),
@@ -48,7 +52,7 @@ def dSdt(t, S):
         (mT/r13**3 * (yT-yL) + mS/r23**3 * (yS-yL))
     ]
 
-t = np.linspace(0, 20, 10000)
+t = np.linspace(0, 20, 1000)
 
 
 sol = solve_ivp(dSdt, (0,20), y0=[xT_0, yT_0, xS_0, yS_0, xL_0, yL_0,
@@ -63,8 +67,6 @@ x2 = sol.y[2]
 y2 = sol.y[3]
 x3 = sol.y[4]
 y3 = sol.y[5]
-
-
 
 # print(x1)
 # print(y1)
@@ -83,5 +85,5 @@ ax.set_ylim(-5, 5)
 ax.set_xlim(-5, 5)
 ani = animation.FuncAnimation(fig, animate, frames=1000, interval=50)
 plt.show()
-# ani.save('plan.gif',writer='pillow',fps=30)
+ani.save('plan.gif',writer='pillow',fps=30)
 
