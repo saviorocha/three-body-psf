@@ -9,25 +9,25 @@ from matplotlib.animation import PillowWriter
 
 Tt = 365 * 360 * 24
 
-G = Go*10000
+G = Go
 
 mT = 5.97e24
 mS = 1.98e30
 mL = 7.36e22
 
 xT_0 = 1e-10
-yT_0 = 149.6e6
+yT_0 = 149.6e9
 xS_0 = 1e-10
 yS_0 = 1e-10
 xL_0 = 1e-10
-yL_0 = yT_0 + 384400
+yL_0 = yT_0 + 384400000
 
-vxT_0 = 30 * Tt
+vxT_0 = 30000
 # vxT_0 = (2 * math.pi * yT_0) / Tt * 10**2
 vyT_0 = 1e-10
 vxS_0 = 1e-10
 vyS_0 = 1e-10
-vxL_0 = vxT_0 + Tt 
+vxL_0 = vxT_0 + 1000
 # vxL_0 = vxT_0 + (2 * math.pi * yL_0) / Tt * 10**2
 vyL_0 = 1e-10
 
@@ -61,7 +61,7 @@ def dSdt(S, t):
         G * (mT/r13**3 * (yT-yL) + mS/r23**3 * (yS-yL))
     ]
 
-t = np.linspace(0, 20, 1000)
+t = np.linspace(0, 200000000, 1000)
 
 sol = odeint(dSdt, y0=[xT_0, yT_0, xS_0, yS_0, xL_0, yL_0,
                        vxT_0, vyT_0, vxS_0, vyS_0, vxL_0, vyL_0], t=t)
@@ -72,7 +72,9 @@ y1 = sol.T[1]
 x2 = sol.T[2]
 y2 = sol.T[3]
 x3 = sol.T[4]
+x3 = x3 + (10 * ( x3 - x1 ))
 y3 = sol.T[5]
+y3 = y3 + (10 * ( y3 - y1 ))
 
 # print(x1)
 # print(y1)
